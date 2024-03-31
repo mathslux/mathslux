@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+
+<p id="equation"></p>
+<p id="reponse"></p>
+
+<button onclick="ReponseVisible()">Réponse</button> 
+<button onClick="window.location.reload();">Nouvelle Équation</button>
+<br>
+<br>
+<br>
+<br>
+<h1><b><a href="../index.html">home</a> </b></h1>
+
+<script>
+function ReponseVisible() {
+if(a == c){
+   if(b == d){document.getElementById("reponse").innerHTML = "S=&#8477; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (tout nombre <i>x</i> est solution de l'équation)"}
+   else{document.getElementById("reponse").innerHTML = "S=&#x2205; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (cette équation n'a pas de solution)"}
+   }
+else{document.getElementById("reponse").innerHTML = "S={"+x+"}";}
+}
+
+a=Math.floor(Math.random() * 20)-10;
+b=Math.floor(Math.random() * 20)-10;
+c=Math.floor(Math.random() * 20)-10;
+x=Math.floor(Math.random() * 20)-10;
+if(a == 0){a=9}
+if(b == 0){b=-4}
+if(c == 0){c=5}
+if(Math.abs(a) == 1){a=-5}
+if(Math.abs(c) == 1){c=-9}
+d=a*x-c*x+b
+if(a == c){if(a > b){d=Math.floor(Math.random() * 20)-10}}
+
+question=a
+if(b > 0){question=question+" <i>x</i> + "}else{question=question+" <i>x</i> - "}
+question=question+Math.abs(b)
+if(d > 0){question=question+" = "+c+" <i>x</i> + "+d}else{question=question+" = "+c+" <i>x</i> - "+Math.abs(d)}
+
+document.getElementById("equation").innerHTML = question;
+
+
+</script> 
+
+</body>
+</html>
