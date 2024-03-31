@@ -34,4 +34,4 @@ function updateScore() {
 } 
 
 // Clear Local Storage 
-// localStorage.removeItem("score");
+localStorage.removeItem("score");
