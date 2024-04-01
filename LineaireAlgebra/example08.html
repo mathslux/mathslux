@@ -1,0 +1,61 @@
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Matrix</title>
+        <meta charset='utf-8'>
+        <script src='animateMatrix.js' async></script>
+        <style>
+            #c1{
+                background-color: #000;
+            }
+        </style>
+    </head>
+    <body onload="javascript:animateMatrix()">
+        <h1><b><a href="../index.html">home</a> </b></h1> 
+        <hr>
+        <p id="textOutput">
+            The determinant is <b>-1</b>. It means that the areas <b>have the same size (|-1|=1)</b> after the transformation 
+            and that the basis vectors flipped <b>(the minus sign in -1)</b>. <br>
+            This is easy to see with the semi-transparent yellowish region. 
+        </p>
+        <canvas id='c1' width="600" height="400"></canvas>
+         <form id="frm1" action="/action_page.php">
+            Matrix A=<br>
+            a: <input type="text" name="a" id="a" size="1" value="0">
+            b: <input type="text" name="b" id="b" size="1" value="1"><br>
+            c: <input type="text" name="c" id="c" size="1" value="1">
+            d: <input type="text" name="d" id="d" size="1" value="0"><br><br>
+            Show determinant?  <input type="checkbox" name="showDeterminant" id="showDeterminant" checked><br><br>
+            Show extra vector?  <input type="checkbox" name="showVector" id="showVector" unchecked onclick="enableDisableVector()"><br>
+            Vx=<input type="text" name="vectx" id="vectx" size="1" value="3" disabled><br>
+            Vy=<input type="text" name="vecty" id="vecty" size="1" value="-3" disabled><br><br>
+            Show a 2nd extra vector?  <input type="checkbox" name="showVector2" id="showVector2" unchecked onclick="enableDisableVector2()"><br>
+            Vx=<input type="text" name="vectx2" id="vectx2" size="1" value="-1" disabled><br>
+            Vy=<input type="text" name="vecty2" id="vecty2" size="1" value="2" disabled><br><br>
+            size of the canvas: <input type="text" name="canvassize" id="canvassize" size="1" value="1"><br>
+            <input type="button" onclick="animateMatrix()" value="Submit">
+         </form>
+    <hr>
+    <p id="examples">
+        Examples: 
+        <a href="example01.html">rotation</a>, 
+        <a href="example02.html">shearing</a>, 
+        <a href="example03.html">shearing/flip</a>, 
+        <a href="example04.html">inverse matrix (part 1)</a>, 
+        <a href="example05.html">inverse matrix (part 2)</a>, 
+        <a href="example06.html">determinant (part 1)</a>, 
+        <a href="example07.html">determinant (part 2)</a>, 
+        <a href="example08.html">determinant (negative)</a>, 
+        <a href="example09.html">determinant (with 2 identical rows)</a>, 
+        <a href="example10.html">determinant (with a zero row)</a>.
+    </p>
+    <hr>
+    <p id="credits">
+    Inspired by the <a href="https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw">3Blue1Brown youtube channel</a>
+    and its videos on <a href="https://www.youtube.com/watch?v=fNk_zzaMoSs&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab">Essence of linear algebra</a>.
+    </p>
+
+    </body>
+</html>
