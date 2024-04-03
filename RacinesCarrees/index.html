@@ -102,7 +102,7 @@ async function ReponseVisible(){while(1){
    if((groupe1 >= 49) && (groupe1 < 64)){chiffre1=7}
    if((groupe1 >= 64) && (groupe1 < 81)){chiffre1=8}
    if(groupe1 >= 81){chiffre1=9}
-   textligne01b="<b><u>"+chiffre1+"</u></b><sup>2</sup>&le;20<"+(chiffre1+1)+"<sup>2</sup>"
+   textligne01b="<b><u>"+chiffre1+"</u></b><sup>2</sup>&le;"+groupe1+"<"+(chiffre1+1)+"<sup>2</sup>"
    document.getElementById("ligne01b").innerHTML = textligne01b
 await sleep(1000);
    textligne01="&radic;<span style='text-decoration: overline;'>"+nbrDepart+"</span>="+chiffre1
