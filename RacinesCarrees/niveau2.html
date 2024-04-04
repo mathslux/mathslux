@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+
+<head> 
+    <title>Les Racines Carrées, niveau 2</title> 
+</head> 
+
+<body onload="generateQuestion()">
+
+<div class="row">
+  <div class="column">
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne00">Quelle est la racine carrée de ?</p>
+    <br>    
+
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne01"> </p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne02"> </p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne03"> </p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne04"> </p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne05"> </p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne06"> </p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne07"> </p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne08"> </p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne09"> </p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne10"> </p>
+    <br>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne11"> </p>
+  </div>
+  <div class="column">
+    <br><br><br>
+
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne01b"> </p>
+
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne02b"></p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne03b"></p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne04b"></p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne05b"></p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne06b"></p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne07b"></p>
+
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne08b"></p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne09b"></p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne10b"></p>
+    <p style="font-family:'Courier New' ; line-height:5px;" id="ligne11b"></p>
+
+  </div>
+</div>
+
+<br>
+<br>
+<button onclick="ReponseVisible()">Réponse</button> 
+<button onClick="window.location.reload();">Nouveau Calcul</button>
+<br>
+<br>
+<h1><b><a href="../index.html">home</a>  <a href="index.html">niveau 1</a> <a href="niveau3.html">niveau 3</a> <a href="niveau4.html">niveau 4</a></b></h1>
+
+<script>
+function generateQuestion(){
+   reponse=Math.floor(Math.random() * 9682)+317;
+   nbrDepart=reponse*reponse
+   document.getElementById("ligne00").innerHTML = "Quelle est la racine carrée de "+nbrDepart+" ?"
+   }
+
+
+
+var sleepSetTimeout_ctrl;
+
+function sleep(ms) {
+    clearInterval(sleepSetTimeout_ctrl);
+    return new Promise(resolve => sleepSetTimeout_ctrl = setTimeout(resolve, ms));
+}
+
+
+
+async function ReponseVisible(){
+
+   for(aa=1;aa<=11;aa++){
+      ligne="ligne"
+      if(aa < 10){ligne=ligne+"0"}
+      ligne=ligne+aa+"b"
+      document.getElementById(ligne).innerHTML = ""
+      }
+
+   for(aa=1;aa<=11;aa++){
+      ligne="ligne"
+      if(aa < 10){ligne=ligne+"0"}
+      ligne=ligne+aa
+      document.getElementById(ligne).innerHTML = ""
+      }
+
+
+   const couleur = [];
+   couleur.push("#000000", "#FF0000", "#00AA00", "#0000FF");
+   couleurIndex=0
+
+   step=1
+
+   var groupe=new Array(); 
+   var chiffre=new Array(); 
+
+   tmp=String(nbrDepart)
+   groupeMax=Math.ceil(tmp.length/2)
+   impair=0
+   if(tmp.length % 2 == 0){groupe[1]=parseInt(tmp.substring(0,2))}else{groupe[1]=parseInt(tmp.substring(0,1));impair=1}
+   for(dd=1;dd<groupeMax;dd++){groupe[dd+1]=parseInt(tmp.substring(dd*2-impair, dd*2-impair+2));}
+
+ttmmpp=""
+for(ss=1;ss<=groupeMax;ss++){ttmmpp=ttmmpp+groupe[ss]+" "}
+
+
+
+   for(j=0;j<10;j++){if((groupe[1] >= j*j) && (groupe[1] < (j+1)*(j+1))){chiffre[1]=j}}
+   ligne="ligne"
+   if(step < 10){ligne=ligne+"0"}
+   ligne=ligne+step+"b"
+   textligne01b="<b><u>"+chiffre[1]+"</u></b><sup>2</sup>&le;"+groupe[1]+"<"+(chiffre[1]+1)+"<sup>2</sup>"
+   document.getElementById(ligne).innerHTML = textligne01b
+await sleep(1000);
+   ligne="ligne"
+   if(step < 10){ligne=ligne+"0"}
+   ligne=ligne+step
+   textligne01=
+   textligne01=""
+   if(impair==1){textligne01=textligne01+"&nbsp;"}
+   textligne01=textligne01+"&radic;<span style='text-decoration: overline;'>"+nbrDepart+"</span>="+chiffre[1]
+   document.getElementById(ligne).innerHTML = textligne01
+await sleep(1000);
+
+
+
+   terme1=groupe[1]
+   terme2=chiffre[1]**2
+   tmp=String(terme2)
+   textligne02="<u>-"
+   for(j=0;j<2-tmp.length;j++){textligne02=textligne02+"&nbsp;"}
+   textligne02=textligne02+terme2+"</u>"
+   ligne="ligne"
+   if((2*step) < 10){ligne=ligne+"0"}
+   ligne=ligne+(2*step)
+   document.getElementById(ligne).innerHTML = textligne02
+await sleep(1000);
+   difference=terme1-terme2
+   tmp=String(difference)
+   textligne03="="
+   for(j=0;j<2-tmp.length;j++){textligne03=textligne03+"&nbsp;"}
+   textligne03=textligne03+difference
+   ligne="ligne"
+   if((2*step+1) < 10){ligne=ligne+"0"}
+   ligne=ligne+(2*step+1)
+   document.getElementById(ligne).innerHTML = textligne03
+await sleep(1000);
+
+
+while(step<groupeMax){
+   step=step+1
+   couleurIndex=((couleurIndex+1) % 4)
+
+   dividende=difference*100+groupe[step]
+   tmp=String(groupe[step])
+   textligne03=textligne03+"<font color="+couleur[couleurIndex]+">"
+   for(j=0;j<2-tmp.length;j++){textligne03=textligne03+"0"}
+   textligne03=textligne03+groupe[step]+"</font>"
+   ligne="ligne"
+   if((2*step-1) < 10){ligne=ligne+"0"}
+   ligne=ligne+(2*step-1)
+   document.getElementById(ligne).innerHTML = textligne03
+await sleep(1000);
+
+   tmp=0
+   for(k=1;k<=step-1;k++){tmp=tmp+chiffre[k]*10**(step-1-k)}
+   diviseur=20*tmp
+   quotient=Math.floor(dividende/diviseur)
+   if(quotient > 9){quotient=9}
+   textligne02b="<font color="+couleur[couleurIndex]+">"+dividende+":"+diviseur+"="+quotient+"</font>"
+   ligne="ligne"
+   if((2*step-2) < 10){ligne=ligne+"0"}
+   ligne=ligne+(2*step-2)+"b"
+   document.getElementById(ligne).innerHTML = textligne02b
+await sleep(1000);
+for(i=0;i<9;i++){if((quotient*(diviseur+quotient)) > dividende){
+                   document.getElementById(ligne).innerHTML = textligne02b+"&nbsp;ATTENTION !&nbsp;"+quotient+"&#183;"+(diviseur+quotient)+" > "+dividende ;
+                   quotient--;}}
+   textligne03b="<font color="+couleur[couleurIndex]+">&nbsp;&nbsp;<b><u>"+quotient+"</u></b>&#183;"+(diviseur+quotient)+"="+(quotient*(diviseur+quotient))+"</font>"
+   ligne="ligne"
+   if((2*step-1) < 10){ligne=ligne+"0"}
+   ligne=ligne+(2*step-1)+"b"
+   document.getElementById(ligne).innerHTML = textligne03b
+await sleep(1000);
+   chiffre[step]=quotient
+   textligne01=textligne01+"<font color="+couleur[couleurIndex]+">"+chiffre[step]+"</font>"
+   document.getElementById("ligne01").innerHTML = textligne01
+await sleep(1000);
+   terme1=dividende
+   terme2=quotient*(diviseur+quotient)
+   tmp=String(terme2)
+   textligne04="<u><font color="+couleur[couleurIndex]+">-"
+   for(j=0;j<2*step-tmp.length;j++){textligne04=textligne04+"&nbsp;"}
+   textligne04=textligne04+terme2+"</font></u>"
+   ligne="ligne"
+   if((2*step) < 10){ligne=ligne+"0"}
+   ligne=ligne+(2*step)
+   document.getElementById(ligne).innerHTML = textligne04
+await sleep(1000);
+   difference=terme1-terme2
+   tmp=String(difference)
+   textligne05="<font color="+couleur[couleurIndex]+">="
+   for(tt=1;tt<(step-1);tt++){textligne05=textligne05+"&nbsp;&nbsp;"}
+   for(j=0;j<4-tmp.length;j++){textligne05=textligne05+"&nbsp;"}
+   textligne05=textligne05+difference+"</font>"
+   ligne="ligne"
+   if((2*step+1) < 10){ligne=ligne+"0"}
+   ligne=ligne+(2*step+1)
+   document.getElementById(ligne).innerHTML = textligne05
+await sleep(1000);
+   textligne03=textligne05
+
+}
+
+   tmp=String(terme1-terme2)
+   textligne07="<font color='#00BB00'>="
+   for(j=0;j<6-tmp.length;j++){textligne07=textligne07+"&nbsp;"}
+   textligne07=textligne07+(terme1 - terme2)+"</font></font>"
+   //document.getElementById("ligne07").innerHTML = textligne07
+   if(Math.abs(terme1 - terme2)>0.001){alert("erreur !")}
+   textligne08="La racine carrée de "+nbrDepart+" est égale à "
+   for(gg=1;gg<chiffre.length;gg++){textligne08=textligne08+chiffre[gg]}
+   document.getElementById("ligne11").innerHTML = textligne08
+}
+</script> 
+
+</body>
+</html>
