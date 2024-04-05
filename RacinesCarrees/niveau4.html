@@ -48,8 +48,8 @@
     <p style="font-family:'Courier New' ; line-height:5px;" id="ligne14"> </p>
     <p style="font-family:'Courier New' ; line-height:5px;" id="ligne15"> </p>
     <p style="font-family:'Courier New' ; line-height:5px;" id="ligne16"> </p>
+    <br><br>
     <p style="font-family:'Courier New' ; line-height:5px;" id="ligne17"> </p>
-    <br>
     <p style="font-family:'Courier New' ; line-height:5px;" id="ligne18"> </p>
   </div>
   <div class="column">
@@ -77,6 +77,9 @@
   </div>
 </div>
 
+<br>
+<br>
+<br>
 <br>
 <br>
 <br>
@@ -250,7 +253,9 @@ await sleep(1000);
    textligne07="<font color='#00BB00'>="
    for(j=0;j<6-tmp.length;j++){textligne07=textligne07+"&nbsp;"}
    textligne07=textligne07+(terme1 - terme2)+"</font></font>"
-   textligne08="La racine carrée de "+nbrDepart+" est environ égale à "+chiffre[1]+"."
+   textligne08="La racine carrée de "+nbrDepart
+   document.getElementById("ligne17").innerHTML = textligne08
+   textligne08="est environ égale à "+chiffre[1]+"."
    for(gg=2;gg<chiffre.length;gg++){textligne08=textligne08+chiffre[gg]}
    document.getElementById("ligne18").innerHTML = textligne08
 }
