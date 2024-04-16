@@ -4,11 +4,18 @@
 <head> 
     <title>Équations</title> 
 </head> 
-   
-<body>
 
+<body>
 <p id="equation"></p>
-<p id="reponse"></p>
+<p id="ligne01"></p>
+<p id="ligne02"></p>
+<p id="ligne03"></p>
+<p id="ligne04"></p>
+<p id="ligne05"></p>
+<p id="ligne06"></p>
+<p id="ligne07"></p>
+<p id="ligne08"></p>
+<p id="ligne09"></p>
 
 <button onclick="ReponseVisible()">Réponse</button> 
 <button onClick="window.location.reload();">Nouvelle Équation</button>
@@ -20,11 +27,68 @@
 
 <script>
 function ReponseVisible() {
-if(a == c){
-   if(b == d){document.getElementById("reponse").innerHTML = "S=&#8477; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (tout nombre <i>x</i> est solution de l'équation)"}
-   else{document.getElementById("reponse").innerHTML = "S=&#x2205; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (cette équation n'a pas de solution)"}
+ligne="&hArr;"+a+" <i>x</i> = "+c+" <i>x</i>"
+if(d >= 0){ligne=ligne+" + "+d}else{ligne=ligne+" "+d}
+if(b > 0){ligne=ligne+" - "+b}else{ligne=ligne+" + "+Math.abs(b)}
+document.getElementById("ligne01").innerHTML = ligne;
+
+ligne="&hArr;"+a+" <i>x</i> = "+c+" <i>x</i>"
+tmp=d-b
+if(tmp >= 0){ligne=ligne+" + "+tmp}else{ligne=ligne+" "+tmp}
+document.getElementById("ligne02").innerHTML = ligne;
+
+if(d == b){
+   ligne="&hArr;"+a+" <i>x</i> = "+c+" <i>x</i>"
+   document.getElementById("ligne03").innerHTML = ligne;
+   ligne="&hArr;("+a
+   if(c >= 0){ligne=ligne+" - "+c+") <i>x</i> = 0"}else{ligne=ligne+" + "+Math.abs(c)+") <i>x</i> = 0"}
+   document.getElementById("ligne04").innerHTML = ligne;
+   if(a == c){
+      document.getElementById("ligne05").innerHTML = "&hArr;0 <i>x</i> = 0";
+      document.getElementById("ligne06").innerHTML = "S=&#8477; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (tout nombre <i>x</i> est solution de l'équation)";
+      }
+      else{
+      tmp=a-c
+      ligne="&hArr;"+tmp+" <i>x</i> = 0"
+      document.getElementById("ligne05").innerHTML = ligne;
+      document.getElementById("ligne06").innerHTML = "S={0}"
+      }
    }
-else{document.getElementById("reponse").innerHTML = "S={"+x+"}";}
+   else{
+       ligne="&hArr;("+a
+       if(c >=0){ligne=ligne+" - "+c}else{ligne=ligne+" + "+Math.abs(c)}
+       ligne=ligne+") <i>x</i> = "
+       tmp=d-b
+       ligne=ligne+tmp
+       document.getElementById("ligne04").innerHTML = ligne;
+       if(a == c){
+          ligne="&hArr;0 <i>x</i> ="
+          tmp=d-b
+          ligne=ligne+tmp
+          document.getElementById("ligne05").innerHTML = ligne;
+          document.getElementById("ligne06").innerHTML = "S=&#x2205; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (cette équation n'a pas de solution)"
+          }
+          else{
+          ligne="&hArr;"
+          tmp=a-c
+          if(tmp == 1){ligne=ligne+" <i>x</i> ="}else{ligne=ligne+tmp+" <i>x</i> ="}
+          tmp=d-b
+          ligne=ligne+tmp
+          document.getElementById("ligne05").innerHTML = ligne;
+ 
+          tmp=(d-b)/(a-c)
+          ligne="&hArr; <i>x</i> ="+tmp
+          document.getElementById("ligne06").innerHTML = ligne;
+
+          document.getElementById("ligne07").innerHTML = "S={"+tmp+"}"
+          }
+   }
+
+//if(a == c){
+//   if(b == d){document.getElementById("reponse").innerHTML = "S=&#8477; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (tout nombre <i>x</i> est solution de l'équation)"}
+//   else{document.getElementById("reponse").innerHTML = "S=&#x2205; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; (cette équation n'a pas de solution)"}
+//   }
+//else{document.getElementById("reponse").innerHTML = "S={"+x+"}";}
 }
 
 a=Math.floor(Math.random() * 20)-10;
