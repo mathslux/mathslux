@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Décomposition en facteurs premiers</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; display:flex; justify-content:center; margin:40px 0; }
+    .container { display:flex; width:90%; max-width:1000px; border:1px solid #ddd; border-radius:8px; overflow:hidden; }
+    .colonne { flex:1; padding:24px; box-sizing:border-box; }
+    .gauche { border-right:1px solid #eee; }
+    .title { font-size:18px; margin-bottom:12px; }
+
+    .factor-line { font-size:1.6rem; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+    .number, .operator { display:inline-block; padding:8px 10px; border-radius:6px; user-select:none; }
+    .number { background:#f7f7f7; border:1px solid #ccc; cursor:grab; min-width:26px; text-align:center; }
+    .number.dragging { opacity:0.6; }
+    .operator { cursor:pointer; font-weight:600; }
+    .operator.active { color:red; }
+    .number.highlight { outline:3px dashed #9ec5ff; border-color:#7fb7ff; }
+
+    p.help { margin-top:12px; color:#555; font-size:0.95rem; }
+    .droplist { display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+
+    .droplist span.empty { color:#999; font-style:italic; }
+
+    #equation-result { margin-top:16px; font-size:1.1rem; color:#333; display:flex; flex-direction:column; gap:6px; }
+
+    .controls { margin-top:16px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    button { padding:8px 16px; border:none; border-radius:6px; background:#0077cc; color:white; cursor:pointer; font-size:1rem; }
+    button:hover { background:#005fa3; }
+    input[type="number"] { padding:6px 10px; border:1px solid #ccc; border-radius:6px; font-size:1rem; width:100px; }
+
+    @media (max-width:640px){ .container{flex-direction:column} .gauche{border-right:none;border-bottom:1px solid #eee} }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="colonne gauche">
+      <div class="title"><strong>Décomposition</strong></div>
+      <div class="factor-line">
+        <span id="number-label"></span>
+        <div id="factors" class="droplist" aria-label="facteurs"></div>
+      </div>
+      <p class="help">Glisse un nombre sur un autre pour <strong>échanger</strong> leurs places. Clique sur un signe « × » pour le colorer en rouge et afficher une factorisation dans la colonne de droite.</p>
+      <div class="controls">
+        <button id="new-number">Nouveau nombre</button> ou
+        <input type="number" id="custom-number" placeholder="Votre nombre" min="2">
+        <button id="set-number">Valider</button>
+        <br><h3><b><a href="../index.html">home</a> </b></h3>
+      </div>
+    </div>
+
+    <div class="colonne droite">
+      <div class="title"><strong>Diviseurs</strong></div>
+      <p id="div-label"></p>
+      <div id="equation-result"></div>
+    </div>
+  </div>
+
+  <script>
+    let currentNumber = null;
+
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function primeFactors(n) {
+      const factors = [];
+      let d = 2;
+      while (n > 1) {
+        while (n % d === 0) {
+          factors.push(d);
+          n /= d;
+        }
+        d++;
+        if (d * d > n && n > 1) {
+          factors.push(n);
+          break;
+        }
+      }
+      return factors;
+    }
+
+    function renderNumber(n) {
+      currentNumber = n;
+      document.getElementById('number-label').textContent = `${n} =`;
+      document.getElementById('div-label').textContent = `Les diviseurs de ${n} sont visibles ici :`;
+      document.getElementById('equation-result').innerHTML = '';
+
+      const factorsContainer = document.getElementById('factors');
+      factorsContainer.innerHTML = '';
+
+      const factorList = [1, ...primeFactors(n)];
+      factorList.forEach((num, i) => {
+        const spanNum = document.createElement('span');
+        spanNum.className = 'number';
+        spanNum.textContent = num;
+        spanNum.setAttribute('draggable','true');
+        spanNum.dataset.index = i;
+        factorsContainer.appendChild(spanNum);
+
+        if (i < factorList.length - 1) {
+          const op = document.createElement('span');
+          op.className = 'operator';
+          op.setAttribute('role','button');
+          op.setAttribute('tabindex','0');
+          op.textContent = '×';
+          factorsContainer.appendChild(op);
+        }
+      });
+
+      attachDragHandlers();
+      attachOperatorHandlers();
+    }
+
+    // --- Drag & Drop ---
+    let draggingIndex = null;
+
+    function onDragStart(e) {
+      draggingIndex = this.dataset.index;
+      e.dataTransfer.setData('text/index', draggingIndex);
+      e.dataTransfer.effectAllowed = 'move';
+      this.classList.add('dragging');
+    }
+
+    function onDragOver(e) {
+      e.preventDefault();
+      if (this.dataset.index !== draggingIndex) this.classList.add('highlight');
+    }
+
+    function onDragLeave(e) {
+      this.classList.remove('highlight');
+    }
+
+    function onDrop(e) {
+      e.preventDefault();
+      this.classList.remove('highlight');
+      const fromIndex = e.dataTransfer.getData('text/index');
+      const toIndex = this.dataset.index;
+      if (fromIndex === toIndex) return;
+
+      const fromEl = document.querySelector(`#factors .number[data-index="${fromIndex}"]`);
+      const toEl = document.querySelector(`#factors .number[data-index="${toIndex}"]`);
+      if (fromEl && toEl) {
+        const tmp = fromEl.textContent;
+        fromEl.textContent = toEl.textContent;
+        toEl.textContent = tmp;
+      }
+
+      const activeOp = document.querySelector('#factors .operator.active');
+      if (activeOp) {
+        const ops = Array.from(document.querySelectorAll('#factors .operator'));
+        const activeIndex = ops.indexOf(activeOp);
+        computeFactorization(activeIndex);
+      }
+    }
+
+    function onDragEnd(e) {
+      this.classList.remove('dragging');
+      document.querySelectorAll('#factors .number').forEach(n => n.classList.remove('highlight'));
+      draggingIndex = null;
+    }
+
+    function attachDragHandlers() {
+      document.querySelectorAll('#factors .number').forEach(el => {
+        el.addEventListener('dragstart', onDragStart);
+        el.addEventListener('dragover', onDragOver);
+        el.addEventListener('dragleave', onDragLeave);
+        el.addEventListener('drop', onDrop);
+        el.addEventListener('dragend', onDragEnd);
+      });
+    }
+
+    // --- Opérateurs ---
+    function clearActiveOperators() {
+      document.querySelectorAll('#factors .operator').forEach(op => op.classList.remove('active'));
+    }
+
+    function computeFactorization(opIndex) {
+      const allChildren = Array.from(document.querySelector('#factors').children);
+      const ops = allChildren.filter(el => el.classList.contains('operator'));
+      const opEl = ops[opIndex];
+      const splitIndex = allChildren.indexOf(opEl);
+
+      const leftNums = [];
+      for (let i = 0; i < splitIndex; i++) {
+        if (allChildren[i].classList.contains('number')) leftNums.push(parseInt(allChildren[i].textContent, 10));
+      }
+
+      const rightNums = [];
+      for (let i = splitIndex+1; i < allChildren.length; i++) {
+        if (allChildren[i].classList.contains('number')) rightNums.push(parseInt(allChildren[i].textContent, 10));
+      }
+
+      let leftProduct = leftNums.reduce((a,b) => a*b, 1);
+      let rightProduct = rightNums.reduce((a,b) => a*b, 1);
+
+      if (leftProduct > rightProduct) [leftProduct, rightProduct] = [rightProduct, leftProduct];
+
+      const text = `${currentNumber} = ${leftProduct} × ${rightProduct}`;
+      const existing = Array.from(document.getElementById('equation-result').children).map(el => el.textContent);
+      if (!existing.includes(text)) {
+        const line = document.createElement('div');
+        line.textContent = text;
+        document.getElementById('equation-result').appendChild(line);
+      }
+    }
+
+    function attachOperatorHandlers() {
+      document.querySelectorAll('#factors .operator').forEach((op, idx) => {
+        op.addEventListener('click', () => {
+          clearActiveOperators();
+          op.classList.add('active');
+          computeFactorization(idx);
+        });
+        op.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            clearActiveOperators();
+            op.classList.add('active');
+            computeFactorization(idx);
+          }
+        });
+      });
+    }
+
+    // --- Bouton Nouveau nombre ---
+    document.getElementById('new-number').addEventListener('click', () => {
+      const n = getRandomInt(50, 150);
+      renderNumber(n);
+    });
+
+    // --- Bouton Valider nombre perso ---
+    document.getElementById('set-number').addEventListener('click', () => {
+      const val = parseInt(document.getElementById('custom-number').value, 10);
+      if (!isNaN(val) && val > 1) {
+        renderNumber(val);
+      } else {
+        alert('Veuillez entrer un nombre entier supérieur à 1.');
+      }
+    });
+
+    // Initialisation
+    renderNumber(getRandomInt(50, 150));
+  </script>
+
+</body>
+</html>
